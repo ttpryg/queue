@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Ttpryg\Queue\Console\Commands;
 
-use Ttpryg\Queue\Contracts\QueueInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Ttpryg\Queue\Contracts\QueueInterface;
 
 class RetryCommand extends Command
 {
@@ -39,6 +39,7 @@ class RetryCommand extends Command
         );
 
         $output->writeln("<info>Retried {$count} failed job(s).</info>");
+
         return Command::SUCCESS;
     }
 }

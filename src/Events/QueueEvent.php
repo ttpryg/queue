@@ -11,6 +11,5 @@ class QueueEvent
         public readonly string $handler,
         public readonly ?string $queue = null,
         public readonly array $metadata = []
-    ) {
-    }
+    ) {}
 }

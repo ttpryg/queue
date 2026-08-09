@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Ttpryg\Queue\Console\Commands;
 
-use Ttpryg\Queue\Contracts\QueueInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Ttpryg\Queue\Contracts\QueueInterface;
 
 class FailedCommand extends Command
 {
@@ -34,6 +34,7 @@ class FailedCommand extends Command
 
         if (empty($failedJobs)) {
             $output->writeln('<info>No failed jobs found.</info>');
+
             return Command::SUCCESS;
         }
 

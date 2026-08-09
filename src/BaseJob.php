@@ -9,12 +9,12 @@ use Ttpryg\Queue\Contracts\JobInterface;
 abstract class BaseJob implements JobInterface
 {
     protected int $retryAfter = 60;
+
     protected int $tries = 1;
 
     public function __construct(
         protected array $data = []
-    ) {
-    }
+    ) {}
 
     abstract public function process(): void;
 

@@ -9,11 +9,17 @@ use Ttpryg\Queue\Payloads\Payload;
 class QueueJob
 {
     public int $attempts = 0;
+
     public ?string $reserved_at = null;
+
     public ?string $reserved_by = null;
+
     public ?string $finished_at = null;
+
     public ?string $exception = null;
+
     public ?string $trace = null;
+
     public ?string $status = null;
 
     public function __construct(
@@ -25,12 +31,11 @@ class QueueJob
         public ?\DateTimeInterface $failed_at = null,
         public ?int $priority = null,
         public ?string $available_at = null,
-    ) {
-    }
+    ) {}
 
     public static function fromArray(array $data): self
     {
-        $job = new self();
+        $job = new self;
         $job->id = isset($data['id']) ? (string) $data['id'] : null;
         $job->connection = $data['connection'] ?? null;
         $job->queue = $data['queue'] ?? null;
@@ -52,7 +57,7 @@ class QueueJob
 
     public static function fromObject(object $row): self
     {
-        $job = new self();
+        $job = new self;
         $job->id = (string) ($row->id ?? null);
         $job->connection = 'database';
         $job->queue = $row->queue ?? null;

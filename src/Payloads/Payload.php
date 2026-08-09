@@ -15,8 +15,7 @@ class Payload implements \ArrayAccess
         public readonly ?string $queue = null,
         public readonly ?int $priority = null,
         public readonly ?int $delay = null,
-    ) {
-    }
+    ) {}
 
     public static function fromArray(array $data): self
     {

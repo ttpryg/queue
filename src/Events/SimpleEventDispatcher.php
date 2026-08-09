@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Ttpryg\Queue\Events;
 
-use Ttpryg\Queue\Contracts\EventDispatcherInterface;
 use Psr\EventDispatcher\EventDispatcherInterface as PsrEventDispatcherInterface;
+use Ttpryg\Queue\Contracts\EventDispatcherInterface;
 
 class SimpleEventDispatcher implements EventDispatcherInterface, PsrEventDispatcherInterface
 {

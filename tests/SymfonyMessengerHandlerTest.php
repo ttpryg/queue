@@ -4,16 +4,15 @@ declare(strict_types=1);
 
 namespace Ttpryg\Queue\Tests;
 
-use Ttpryg\Queue\BaseJob;
+use PHPUnit\Framework\TestCase;
+use RuntimeException;
 use Ttpryg\Queue\Config\QueueConfig;
 use Ttpryg\Queue\Entities\QueueJob;
 use Ttpryg\Queue\Handlers\SymfonyMessengerHandler;
-use PHPUnit\Framework\TestCase;
-use RuntimeException;
 
 class SymfonyMessengerHandlerTest extends TestCase
 {
-    public function testPush(): void
+    public function test_push(): void
     {
         $config = new QueueConfig(jobHandlers: [
             'TestDummyJob' => TestDummyJob::class,
@@ -28,9 +27,9 @@ class SymfonyMessengerHandlerTest extends TestCase
         $this->assertTrue(TestDummyJob::$executed);
     }
 
-    public function testFailedAndRetry(): void
+    public function test_failed_and_retry(): void
     {
-        $config = new QueueConfig();
+        $config = new QueueConfig;
         $handler = new SymfonyMessengerHandler($config);
 
         $job = new QueueJob(

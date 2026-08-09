@@ -13,8 +13,7 @@ class PayloadMetadata
         public readonly ?string $requestId = null,
         public readonly ?string $createdAt = null,
         public readonly array $custom = []
-    ) {
-    }
+    ) {}
 
     public static function fromArray(array $data): self
     {
@@ -52,7 +51,7 @@ class PayloadMetadata
             $result['created_at'] = $this->createdAt;
         }
 
-        if (!empty($this->custom)) {
+        if (! empty($this->custom)) {
             $result['custom'] = $this->custom;
         }
 

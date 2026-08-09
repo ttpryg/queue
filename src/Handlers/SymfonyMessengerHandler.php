@@ -4,38 +4,40 @@ declare(strict_types=1);
 
 namespace Ttpryg\Queue\Handlers;
 
-use Ttpryg\Queue\Config\QueueConfig;
-use Ttpryg\Queue\Contracts\QueueInterface;
-use Ttpryg\Queue\Entities\QueueJob as QueueJobEntity;
-use Ttpryg\Queue\Entities\PayloadMetadata;
-use Ttpryg\Queue\Entities\QueuePushResult;
-use Ttpryg\Queue\Message\MessageHandler;
-use Ttpryg\Queue\Message\SymfonyQueueMessage;
 use InvalidArgumentException;
 use Psr\Log\LoggerInterface;
-use Throwable;
 use Symfony\Component\Messenger\Envelope;
+use Symfony\Component\Messenger\Handler\HandlersLocator;
 use Symfony\Component\Messenger\MessageBus;
 use Symfony\Component\Messenger\MessageBusInterface;
-use Symfony\Component\Messenger\Handler\HandlersLocator;
 use Symfony\Component\Messenger\Middleware\HandleMessageMiddleware;
 use Symfony\Component\Messenger\Stamp\DelayStamp;
 use Symfony\Component\Messenger\Stamp\TransportNamesStamp;
+use Throwable;
+use Ttpryg\Queue\Config\QueueConfig;
+use Ttpryg\Queue\Contracts\QueueInterface;
+use Ttpryg\Queue\Entities\PayloadMetadata;
+use Ttpryg\Queue\Entities\QueueJob as QueueJobEntity;
+use Ttpryg\Queue\Entities\QueuePushResult;
+use Ttpryg\Queue\Message\MessageHandler;
+use Ttpryg\Queue\Message\SymfonyQueueMessage;
 
 class SymfonyMessengerHandler implements QueueInterface
 {
     protected ?int $delay = null;
+
     protected ?int $priority = null;
 
     private ?MessageBusInterface $messageBus = null;
+
     private ?MessageHandler $messageHandler = null;
+
     private array $failedJobs = [];
 
     public function __construct(
         protected QueueConfig $config,
         protected ?LoggerInterface $logger = null
-    ) {
-    }
+    ) {}
 
     public function name(): string
     {
@@ -88,7 +90,7 @@ class SymfonyMessengerHandler implements QueueInterface
     public function failed(QueueJobEntity $queueJob, Throwable $err, bool $keepJob = true): bool
     {
         $jobId = $queueJob->id !== null
-            ? (str_starts_with((string) $queueJob->id, 'failed_') ? (string) $queueJob->id : 'failed_' . $queueJob->id)
+            ? (str_starts_with((string) $queueJob->id, 'failed_') ? (string) $queueJob->id : 'failed_'.$queueJob->id)
             : uniqid('failed_');
 
         $failedJob = [
@@ -96,7 +98,7 @@ class SymfonyMessengerHandler implements QueueInterface
             'connection' => $this->name(),
             'queue' => $queueJob->queue,
             'payload' => $queueJob->payload?->toArray() ?? [],
-            'failed_at' => (new \DateTimeImmutable())->format('Y-m-d H:i:s'),
+            'failed_at' => (new \DateTimeImmutable)->format('Y-m-d H:i:s'),
             'exception' => $err->getMessage(),
         ];
 
@@ -121,30 +123,35 @@ class SymfonyMessengerHandler implements QueueInterface
         foreach ($this->config->symfonyMessenger['transports'] ?? ['default' => 'sync://'] as $name => $dsn) {
             $queues[] = $name;
         }
+
         return $queues;
     }
 
     public function priority(int $priority): self
     {
         $this->priority = $priority;
+
         return $this;
     }
 
     public function delay(int $delay): self
     {
         $this->delay = $delay;
+
         return $this;
     }
 
     public function setPriority(int $priority): self
     {
         $this->priority = $priority;
+
         return $this;
     }
 
     public function setDelay(int $delay): self
     {
         $this->delay = $delay;
+
         return $this;
     }
 
@@ -169,12 +176,13 @@ class SymfonyMessengerHandler implements QueueInterface
         foreach ($this->failedJobs as $failedJob) {
             if ($queue !== null && $failedJob['queue'] !== $queue) {
                 $remaining[] = $failedJob;
+
                 continue;
             }
 
-            if ($id === null || $failedJob['id'] === 'failed_' . $id || $failedJob['id'] === (string) $id) {
+            if ($id === null || $failedJob['id'] === 'failed_'.$id || $failedJob['id'] === (string) $id) {
                 $payload = $failedJob['payload'];
-                if (!empty($payload)) {
+                if (! empty($payload)) {
                     $this->push(
                         $failedJob['queue'],
                         $payload['job'],
@@ -199,7 +207,7 @@ class SymfonyMessengerHandler implements QueueInterface
         $found = false;
 
         foreach ($this->failedJobs as $failedJob) {
-            if ($failedJob['id'] === 'failed_' . $id || $failedJob['id'] === (string) $id) {
+            if ($failedJob['id'] === 'failed_'.$id || $failedJob['id'] === (string) $id) {
                 $found = true;
             } else {
                 $remaining[] = $failedJob;
@@ -218,12 +226,13 @@ class SymfonyMessengerHandler implements QueueInterface
         foreach ($this->failedJobs as $failedJob) {
             if ($queue !== null && $failedJob['queue'] !== $queue) {
                 $remaining[] = $failedJob;
+
                 continue;
             }
 
             if ($hours !== null) {
                 $failedAt = new \DateTimeImmutable($failedJob['failed_at']);
-                $diff = (new \DateTimeImmutable())->diff($failedAt);
+                $diff = (new \DateTimeImmutable)->diff($failedAt);
 
                 if ($diff->h < $hours) {
                     $remaining[] = $failedJob;
@@ -239,6 +248,7 @@ class SymfonyMessengerHandler implements QueueInterface
         if ($this->messageBus === null) {
             $this->messageBus = $this->createMessageBus();
         }
+
         return $this->messageBus;
     }
 

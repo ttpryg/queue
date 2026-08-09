@@ -4,22 +4,20 @@ declare(strict_types=1);
 
 namespace Ttpryg\Queue\Database;
 
+use PDO;
 use Ttpryg\Queue\Contracts\DatabaseAdapterInterface;
 use Ttpryg\Queue\Enums\Status;
-use PDO;
-use stdClass;
 
 class PdoDatabaseAdapter implements DatabaseAdapterInterface
 {
     public function __construct(
         protected PDO $pdo
-    ) {
-    }
+    ) {}
 
     public function insert(string $table, array $data): string|int
     {
         $columns = array_keys($data);
-        $placeholders = array_map(fn($col) => ':' . $col, $columns);
+        $placeholders = array_map(fn ($col) => ':'.$col, $columns);
 
         $sql = sprintf(
             'INSERT INTO %s (%s) VALUES (%s)',
@@ -44,14 +42,14 @@ class PdoDatabaseAdapter implements DatabaseAdapterInterface
             'available_at' => $now,
         ];
 
-        if (!empty($priorities)) {
+        if (! empty($priorities)) {
             $inClause = [];
             foreach ($priorities as $idx => $pri) {
-                $paramKey = 'pri_' . $idx;
-                $inClause[] = ':' . $paramKey;
+                $paramKey = 'pri_'.$idx;
+                $inClause[] = ':'.$paramKey;
                 $params[$paramKey] = $pri;
             }
-            $sql .= ' AND priority IN (' . implode(',', $inClause) . ')';
+            $sql .= ' AND priority IN ('.implode(',', $inClause).')';
         }
 
         $sql .= ' ORDER BY priority DESC, available_at ASC LIMIT 1';
@@ -70,14 +68,14 @@ class PdoDatabaseAdapter implements DatabaseAdapterInterface
         $params = [];
 
         foreach ($data as $col => $val) {
-            $paramKey = 'set_' . $col;
+            $paramKey = 'set_'.$col;
             $setClauses[] = "{$col} = :{$paramKey}";
             $params[$paramKey] = $val;
         }
 
         $whereClauses = [];
         foreach ($where as $col => $val) {
-            $paramKey = 'where_' . $col;
+            $paramKey = 'where_'.$col;
             $whereClauses[] = "{$col} = :{$paramKey}";
             $params[$paramKey] = $val;
         }
@@ -90,6 +88,7 @@ class PdoDatabaseAdapter implements DatabaseAdapterInterface
         );
 
         $stmt = $this->pdo->prepare($sql);
+
         return $stmt->execute($params);
     }
 
@@ -106,9 +105,9 @@ class PdoDatabaseAdapter implements DatabaseAdapterInterface
                     $inClause[] = ":{$paramKey}";
                     $params[$paramKey] = $v;
                 }
-                $whereClauses[] = "{$col} IN (" . implode(',', $inClause) . ')';
+                $whereClauses[] = "{$col} IN (".implode(',', $inClause).')';
             } else {
-                $paramKey = 'where_' . $col;
+                $paramKey = 'where_'.$col;
                 $whereClauses[] = "{$col} = :{$paramKey}";
                 $params[$paramKey] = $val;
             }

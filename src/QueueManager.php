@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace Ttpryg\Queue;
 
+use Psr\Log\LoggerInterface;
 use Ttpryg\Queue\Config\QueueConfig;
 use Ttpryg\Queue\Contracts\DatabaseAdapterInterface;
 use Ttpryg\Queue\Contracts\EventDispatcherInterface;
 use Ttpryg\Queue\Contracts\QueueInterface;
 use Ttpryg\Queue\Events\QueueEventManager;
 use Ttpryg\Queue\Exceptions\QueueException;
-use Psr\Log\LoggerInterface;
 
 class QueueManager
 {
@@ -32,7 +32,7 @@ class QueueManager
 
     public function handler(string $name): QueueInterface
     {
-        if (!isset($this->config->handlers[$name])) {
+        if (! isset($this->config->handlers[$name])) {
             throw QueueException::forIncorrectHandler();
         }
 

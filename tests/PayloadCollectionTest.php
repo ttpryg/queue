@@ -4,15 +4,15 @@ declare(strict_types=1);
 
 namespace Ttpryg\Queue\Tests;
 
+use PHPUnit\Framework\TestCase;
 use Ttpryg\Queue\Payloads\Payload;
 use Ttpryg\Queue\Payloads\PayloadCollection;
-use PHPUnit\Framework\TestCase;
 
 class PayloadCollectionTest extends TestCase
 {
-    public function testPayloadCollectionOperations(): void
+    public function test_payload_collection_operations(): void
     {
-        $collection = new PayloadCollection();
+        $collection = new PayloadCollection;
         $this->assertTrue($collection->isEmpty());
         $this->assertEquals(0, $collection->count());
 

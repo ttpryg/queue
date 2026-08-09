@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Ttpryg\Queue\Contracts;
 
-use Ttpryg\Queue\Entities\QueueJob;
 use Ttpryg\Queue\Entities\PayloadMetadata;
+use Ttpryg\Queue\Entities\QueueJob;
 use Ttpryg\Queue\Entities\QueuePushResult;
 
 interface QueueInterface

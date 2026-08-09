@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Ttpryg\Queue\Tests;
 
-use Ttpryg\Queue\Entities\QueuePushResult;
 use PHPUnit\Framework\TestCase;
+use Ttpryg\Queue\Entities\QueuePushResult;
 
 class QueuePushResultTest extends TestCase
 {
-    public function testSuccessResult(): void
+    public function test_success_result(): void
     {
         $result = QueuePushResult::success('100');
 
@@ -18,7 +18,7 @@ class QueuePushResultTest extends TestCase
         $this->assertNull($result->errorMessage);
     }
 
-    public function testFailureResult(): void
+    public function test_failure_result(): void
     {
         $result = QueuePushResult::failure('Connection failed');
 
