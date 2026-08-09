@@ -1,6 +1,6 @@
-# Esoftdream Queue Core
+# Ttpryg Queue Core
 
-`esoftdream/queue-core` is a lightweight, high-performance, **framework-agnostic** queue management library for PHP 8.1+.
+`ttpryg/queue` is a lightweight, high-performance, **framework-agnostic** queue management library for PHP 8.1+.
 
 It provides a unified queue interface with support for Database (via PDO or custom adapters) and Symfony Messenger backends.
 
@@ -21,10 +21,10 @@ It provides a unified queue interface with support for Database (via PDO or cust
 
 ## Installation
 
-Add `esoftdream/queue-core` to your `composer.json`:
+Add `ttpryg/queue` to your `composer.json`:
 
 ```bash
-composer require esoftdream/queue-core
+composer require ttpryg/queue
 ```
 
 ---
@@ -164,7 +164,7 @@ $pdo = new PDO('mysql:host=127.0.0.1;dbname=app_db', 'dbuser', 'dbpass');
 $config = QueueConfig::fromArray(['defaultHandler' => 'database']);
 $queue = (new QueueManager($config, new PdoDatabaseAdapter($pdo)))->init();
 
-$app = new Application('Esoftdream Queue CLI', '1.0.0');
+$app = new Application('Ttpryg Queue CLI', '1.0.0');
 $app->add(new WorkCommand($queue));
 $app->add(new ClearCommand($queue));
 $app->add(new FailedCommand($queue));
@@ -183,7 +183,7 @@ php bin/queue queue:work --queue=emails --memory=128 --tries=3
 
 ## Custom Architecture Adapters
 
-To integrate `esoftdream/queue-core` with custom database connections or framework event loops, implement the contracts:
+To integrate `ttpryg/queue` with custom database connections or framework event loops, implement the contracts:
 
 - **`Ttpryg\Queue\Contracts\DatabaseAdapterInterface`**: Implement to use custom query builders (e.g. CodeIgniter 4 Query Builder, Doctrine DBAL, Eloquent).
 - **`Ttpryg\Queue\Contracts\EventDispatcherInterface`**: Implement to bridge events to custom event engines (e.g. CodeIgniter Events, Symfony EventDispatcher, Laravel Events).
