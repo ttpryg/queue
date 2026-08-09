@@ -9,10 +9,9 @@ use Ttpryg\Queue\Contracts\JobInterface;
 use Psr\Log\LoggerInterface;
 use RuntimeException;
 use Symfony\Component\Messenger\Envelope;
-use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
 use Symfony\Component\Messenger\MessageBusInterface;
 
-class MessageHandler implements MessageHandlerInterface
+class MessageHandler
 {
     private ?MessageBusInterface $messageBus = null;
 
@@ -44,11 +43,15 @@ class MessageHandler implements MessageHandlerInterface
 
     private function resolveJobClass(string $name): string
     {
-        if (!isset($this->config->jobHandlers[$name])) {
-            throw new RuntimeException("Job handler '{$name}' not found.");
+        if (isset($this->config->jobHandlers[$name])) {
+            return $this->config->jobHandlers[$name];
         }
 
-        return $this->config->jobHandlers[$name];
+        if (class_exists($name)) {
+            return $name;
+        }
+
+        throw new RuntimeException("Job handler '{$name}' not found.");
     }
 
     public function setMessageBus(MessageBusInterface $messageBus): void

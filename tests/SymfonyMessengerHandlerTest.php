@@ -11,16 +11,6 @@ use Ttpryg\Queue\Handlers\SymfonyMessengerHandler;
 use PHPUnit\Framework\TestCase;
 use RuntimeException;
 
-class TestDummyJob extends BaseJob
-{
-    public static bool $executed = false;
-
-    public function process(): void
-    {
-        self::$executed = true;
-    }
-}
-
 class SymfonyMessengerHandlerTest extends TestCase
 {
     public function testPush(): void

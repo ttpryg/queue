@@ -58,7 +58,9 @@ class SymfonyMessengerHandler implements QueueInterface
             $stamps[] = new DelayStamp($this->delay * 1000);
         }
 
-        $stamps[] = new TransportNamesStamp([$queue]);
+        if (class_exists(TransportNamesStamp::class)) {
+            $stamps[] = new TransportNamesStamp([$queue]);
+        }
 
         try {
             $envelope = new Envelope($message, $stamps);
@@ -85,8 +87,12 @@ class SymfonyMessengerHandler implements QueueInterface
 
     public function failed(QueueJobEntity $queueJob, Throwable $err, bool $keepJob = true): bool
     {
+        $jobId = $queueJob->id !== null
+            ? (str_starts_with((string) $queueJob->id, 'failed_') ? (string) $queueJob->id : 'failed_' . $queueJob->id)
+            : uniqid('failed_');
+
         $failedJob = [
-            'id' => uniqid('failed_'),
+            'id' => $jobId,
             'connection' => $this->name(),
             'queue' => $queueJob->queue,
             'payload' => $queueJob->payload?->toArray() ?? [],
@@ -166,7 +172,7 @@ class SymfonyMessengerHandler implements QueueInterface
                 continue;
             }
 
-            if ($id === null || $failedJob['id'] === 'failed_' . $id) {
+            if ($id === null || $failedJob['id'] === 'failed_' . $id || $failedJob['id'] === (string) $id) {
                 $payload = $failedJob['payload'];
                 if (!empty($payload)) {
                     $this->push(
@@ -193,7 +199,7 @@ class SymfonyMessengerHandler implements QueueInterface
         $found = false;
 
         foreach ($this->failedJobs as $failedJob) {
-            if ($failedJob['id'] === 'failed_' . $id) {
+            if ($failedJob['id'] === 'failed_' . $id || $failedJob['id'] === (string) $id) {
                 $found = true;
             } else {
                 $remaining[] = $failedJob;
