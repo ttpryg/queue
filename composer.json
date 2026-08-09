@@ -31,6 +31,9 @@
         "symfony/amqp-messenger": "For AMQP transport (RabbitMQ)",
         "symfony/redis-messenger": "For Redis transport"
     },
+    "scripts": {
+        "test": "vendor/bin/phpunit"
+    },
     "minimum-stability": "dev",
     "prefer-stable": true,
     "autoload": {

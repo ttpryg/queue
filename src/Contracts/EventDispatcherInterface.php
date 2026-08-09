@@ -9,5 +9,5 @@ interface EventDispatcherInterface
     /**
      * Dispatch an event object or event by name with metadata.
      */
-    public function dispatch(object|string $event, array $metadata = []): void;
+    public function dispatch(object|string $event, array $metadata = []): object;
 }

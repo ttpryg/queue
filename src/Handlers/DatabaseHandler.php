@@ -91,6 +91,11 @@ class DatabaseHandler implements QueueInterface
 
         $this->db->update($this->table, $updateData, ['id' => $row->id]);
 
+        $row->status = Status::Reserved->value;
+        $row->attempts = $updateData['attempts'];
+        $row->reserved_at = $now;
+        $row->reserved_by = $updateData['reserved_by'];
+
         return QueueJob::fromObject($row);
     }
 
