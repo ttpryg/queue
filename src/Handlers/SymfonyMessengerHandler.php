@@ -58,7 +58,9 @@ class SymfonyMessengerHandler implements QueueInterface
             $stamps[] = new DelayStamp($this->delay * 1000);
         }
 
-        $stamps[] = new TransportNamesStamp([$queue]);
+        if (class_exists(TransportNamesStamp::class)) {
+            $stamps[] = new TransportNamesStamp([$queue]);
+        }
 
         try {
             $envelope = new Envelope($message, $stamps);
