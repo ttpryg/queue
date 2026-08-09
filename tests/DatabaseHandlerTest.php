@@ -4,16 +4,17 @@ declare(strict_types=1);
 
 namespace Ttpryg\Queue\Tests;
 
-use Ttpryg\Queue\Config\QueueConfig;
-use Ttpryg\Queue\Database\PdoDatabaseAdapter;
-use Ttpryg\Queue\Handlers\DatabaseHandler;
 use PDO;
 use PHPUnit\Framework\TestCase;
 use RuntimeException;
+use Ttpryg\Queue\Config\QueueConfig;
+use Ttpryg\Queue\Database\PdoDatabaseAdapter;
+use Ttpryg\Queue\Handlers\DatabaseHandler;
 
 class DatabaseHandlerTest extends TestCase
 {
     private PDO $pdo;
+
     private DatabaseHandler $handler;
 
     protected function setUp(): void
@@ -42,11 +43,11 @@ class DatabaseHandlerTest extends TestCase
         ');
 
         $adapter = new PdoDatabaseAdapter($this->pdo);
-        $config = new QueueConfig();
+        $config = new QueueConfig;
         $this->handler = new DatabaseHandler($config, $adapter);
     }
 
-    public function testPushAndPop(): void
+    public function test_push_and_pop(): void
     {
         $result = $this->handler->push('emails', 'SendWelcomeEmail', ['user_id' => 42]);
 
@@ -61,7 +62,7 @@ class DatabaseHandlerTest extends TestCase
         $this->assertEquals('reserved', $job->status);
     }
 
-    public function testDoneAndClear(): void
+    public function test_done_and_clear(): void
     {
         $this->handler->push('default', 'ProcessTask', ['foo' => 'bar']);
         $job = $this->handler->pop('default');
@@ -74,7 +75,7 @@ class DatabaseHandlerTest extends TestCase
         $this->assertTrue($cleared);
     }
 
-    public function testFailedAndRetry(): void
+    public function test_failed_and_retry(): void
     {
         $this->handler->push('default', 'FailingJob', []);
         $job = $this->handler->pop('default');

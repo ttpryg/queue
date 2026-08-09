@@ -4,21 +4,23 @@ declare(strict_types=1);
 
 namespace Ttpryg\Queue\Handlers;
 
-use Ttpryg\Queue\Config\QueueConfig;
-use Ttpryg\Queue\Contracts\DatabaseAdapterInterface;
-use Ttpryg\Queue\Contracts\QueueInterface;
-use Ttpryg\Queue\Entities\QueueJob;
-use Ttpryg\Queue\Entities\PayloadMetadata;
-use Ttpryg\Queue\Entities\QueuePushResult;
-use Ttpryg\Queue\Enums\Status;
 use InvalidArgumentException;
 use Psr\Log\LoggerInterface;
 use Throwable;
+use Ttpryg\Queue\Config\QueueConfig;
+use Ttpryg\Queue\Contracts\DatabaseAdapterInterface;
+use Ttpryg\Queue\Contracts\QueueInterface;
+use Ttpryg\Queue\Entities\PayloadMetadata;
+use Ttpryg\Queue\Entities\QueueJob;
+use Ttpryg\Queue\Entities\QueuePushResult;
+use Ttpryg\Queue\Enums\Status;
 
 class DatabaseHandler implements QueueInterface
 {
     protected ?int $delay = null;
+
     protected ?int $priority = null;
+
     protected string $table = 'queue_jobs';
 
     public function __construct(
@@ -67,7 +69,8 @@ class DatabaseHandler implements QueueInterface
 
             return QueuePushResult::success((string) $insertId);
         } catch (Throwable $e) {
-            $this->logger?->error('Failed to push job: ' . $e->getMessage());
+            $this->logger?->error('Failed to push job: '.$e->getMessage());
+
             return QueuePushResult::failure($e->getMessage());
         }
     }
@@ -128,7 +131,7 @@ class DatabaseHandler implements QueueInterface
 
         $result = $this->db->update($this->table, $updateData, ['id' => $queueJob->id]);
 
-        if (!$keepJob) {
+        if (! $keepJob) {
             $this->db->delete($this->table, ['id' => $queueJob->id]);
         }
 
@@ -171,24 +174,28 @@ class DatabaseHandler implements QueueInterface
     public function priority(int $priority): self
     {
         $this->priority = $priority;
+
         return $this;
     }
 
     public function delay(int $delay): self
     {
         $this->delay = $delay;
+
         return $this;
     }
 
     public function setPriority(int $priority): self
     {
         $this->priority = $priority;
+
         return $this;
     }
 
     public function setDelay(int $delay): self
     {
         $this->delay = $delay;
+
         return $this;
     }
 

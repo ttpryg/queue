@@ -10,8 +10,7 @@ class SymfonyQueueMessage
         public readonly string $job,
         public readonly array $data = [],
         public readonly array $options = []
-    ) {
-    }
+    ) {}
 
     public function getQueue(): string
     {

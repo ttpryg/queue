@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Ttpryg\Queue\Message;
 
-use Ttpryg\Queue\Config\QueueConfig;
-use Ttpryg\Queue\Contracts\JobInterface;
 use Psr\Log\LoggerInterface;
 use RuntimeException;
 use Symfony\Component\Messenger\Envelope;
 use Symfony\Component\Messenger\MessageBusInterface;
+use Ttpryg\Queue\Config\QueueConfig;
+use Ttpryg\Queue\Contracts\JobInterface;
 
 class MessageHandler
 {
@@ -18,19 +18,18 @@ class MessageHandler
     public function __construct(
         protected QueueConfig $config,
         protected ?LoggerInterface $logger = null
-    ) {
-    }
+    ) {}
 
     public function __invoke(SymfonyQueueMessage $message): void
     {
         $jobClass = $this->resolveJobClass($message->job);
 
-        if (!class_exists($jobClass)) {
+        if (! class_exists($jobClass)) {
             throw new RuntimeException("Job class '{$jobClass}' not found.");
         }
 
         /** @var JobInterface $job */
-        $job = new $jobClass();
+        $job = new $jobClass;
 
         $this->logger?->info("Processing job: {$message->job}", [
             'queue' => $message->getQueue(),

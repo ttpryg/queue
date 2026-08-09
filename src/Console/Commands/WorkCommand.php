@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace Ttpryg\Queue\Console\Commands;
 
-use Ttpryg\Queue\Contracts\QueueInterface;
-use Ttpryg\Queue\Entities\QueueJob;
-use Ttpryg\Queue\Events\QueueEventManager;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Throwable;
+use Ttpryg\Queue\Contracts\QueueInterface;
+use Ttpryg\Queue\Entities\QueueJob;
+use Ttpryg\Queue\Events\QueueEventManager;
 
 class WorkCommand extends Command
 {
@@ -61,6 +61,7 @@ class WorkCommand extends Command
 
             if ($job === null) {
                 sleep($rest);
+
                 continue;
             }
 
@@ -87,7 +88,7 @@ class WorkCommand extends Command
             }
 
             $jobClass = $job->payload->job;
-            if (!class_exists($jobClass)) {
+            if (! class_exists($jobClass)) {
                 throw new \RuntimeException("Job class '{$jobClass}' not found.");
             }
 
@@ -102,7 +103,7 @@ class WorkCommand extends Command
             $duration = microtime(true) - $startTime;
 
             QueueEventManager::jobProcessingCompleted($this->queueHandler->name(), $queueName, $job, $duration);
-            $output->writeln("<info>Job completed: {$job->job} [ID: {$job->id}] in " . round($duration, 4) . 's</info>');
+            $output->writeln("<info>Job completed: {$job->job} [ID: {$job->id}] in ".round($duration, 4).'s</info>');
         } catch (Throwable $e) {
             $duration = microtime(true) - $startTime;
             QueueEventManager::jobFailed($this->queueHandler->name(), $queueName, $job, $e, $duration);

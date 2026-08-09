@@ -4,14 +4,15 @@ declare(strict_types=1);
 
 namespace Ttpryg\Queue\Tests;
 
-use Ttpryg\Queue\Database\PdoDatabaseAdapter;
-use Ttpryg\Queue\Enums\Status;
 use PDO;
 use PHPUnit\Framework\TestCase;
+use Ttpryg\Queue\Database\PdoDatabaseAdapter;
+use Ttpryg\Queue\Enums\Status;
 
 class PdoDatabaseAdapterTest extends TestCase
 {
     private PDO $pdo;
+
     private PdoDatabaseAdapter $adapter;
 
     protected function setUp(): void
@@ -42,7 +43,7 @@ class PdoDatabaseAdapterTest extends TestCase
         $this->adapter = new PdoDatabaseAdapter($this->pdo);
     }
 
-    public function testInsertAndFetchWaitingJob(): void
+    public function test_insert_and_fetch_waiting_job(): void
     {
         $id = $this->adapter->insert('queue_jobs', [
             'queue' => 'default',
@@ -63,7 +64,7 @@ class PdoDatabaseAdapterTest extends TestCase
         $this->assertEquals('TestJob', $row->job);
     }
 
-    public function testUpdateAndDelete(): void
+    public function test_update_and_delete(): void
     {
         $id = $this->adapter->insert('queue_jobs', [
             'queue' => 'default',

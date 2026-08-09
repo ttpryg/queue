@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Ttpryg\Queue\Tests;
 
-use Ttpryg\Queue\Entities\PayloadMetadata;
 use PHPUnit\Framework\TestCase;
+use Ttpryg\Queue\Entities\PayloadMetadata;
 
 class PayloadMetadataTest extends TestCase
 {
-    public function testMetadataSerialization(): void
+    public function test_metadata_serialization(): void
     {
         $metadata = new PayloadMetadata(
             userId: 'user_123',

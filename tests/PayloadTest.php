@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace Ttpryg\Queue\Tests;
 
-use Ttpryg\Queue\Payloads\Payload;
-use Ttpryg\Queue\Payloads\PayloadCollection;
 use PHPUnit\Framework\TestCase;
 use RuntimeException;
+use Ttpryg\Queue\Payloads\Payload;
+use Ttpryg\Queue\Payloads\PayloadCollection;
 
 class PayloadTest extends TestCase
 {
-    public function testPayloadGettersAndToArray(): void
+    public function test_payload_getters_and_to_array(): void
     {
         $payload = new Payload(
             job: 'SendEmail',
@@ -35,7 +35,7 @@ class PayloadTest extends TestCase
         $this->assertEquals(5, $array['priority']);
     }
 
-    public function testFromArray(): void
+    public function test_from_array(): void
     {
         $data = [
             'job' => 'ProcessOrder',
@@ -49,17 +49,17 @@ class PayloadTest extends TestCase
         $this->assertEquals('orders', $payload->queue);
     }
 
-    public function testChainedJobs(): void
+    public function test_chained_jobs(): void
     {
         $payload = new Payload('JobA');
-        $collection = new PayloadCollection();
+        $collection = new PayloadCollection;
         $collection->add(new Payload('JobB'));
 
         $payload->setChainedJobs($collection);
         $this->assertSame($collection, $payload->getChainedJobs());
     }
 
-    public function testArrayAccess(): void
+    public function test_array_access(): void
     {
         $payload = new Payload('JobA', ['foo' => 'bar']);
 

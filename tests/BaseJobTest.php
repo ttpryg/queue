@@ -4,40 +4,37 @@ declare(strict_types=1);
 
 namespace Ttpryg\Queue\Tests;
 
-use Ttpryg\Queue\BaseJob;
 use PHPUnit\Framework\TestCase;
+use Ttpryg\Queue\BaseJob;
 
 class BaseJobTest extends TestCase
 {
-    public function testGetRetryAfter(): void
+    public function test_get_retry_after(): void
     {
-        $job = new class (['data' => 'value']) extends BaseJob {
-            public function process(): void
-            {
-            }
+        $job = new class(['data' => 'value']) extends BaseJob
+        {
+            public function process(): void {}
         };
 
         $this->assertEquals(60, $job->getRetryAfter());
     }
 
-    public function testGetTries(): void
+    public function test_get_tries(): void
     {
-        $job = new class (['data' => 'value']) extends BaseJob {
-            public function process(): void
-            {
-            }
+        $job = new class(['data' => 'value']) extends BaseJob
+        {
+            public function process(): void {}
         };
 
         $this->assertEquals(1, $job->getTries());
     }
 
-    public function testGetDataAndSetData(): void
+    public function test_get_data_and_set_data(): void
     {
         $data = ['key' => 'value'];
-        $job = new class ($data) extends BaseJob {
-            public function process(): void
-            {
-            }
+        $job = new class($data) extends BaseJob
+        {
+            public function process(): void {}
         };
 
         $this->assertEquals($data, $job->getData());
@@ -46,9 +43,10 @@ class BaseJobTest extends TestCase
         $this->assertEquals(['new' => 'data'], $job->getData());
     }
 
-    public function testExecuteCallsProcess(): void
+    public function test_execute_calls_process(): void
     {
-        $job = new class (['test' => 'data']) extends BaseJob {
+        $job = new class(['test' => 'data']) extends BaseJob
+        {
             public bool $processed = false;
 
             public function process(): void

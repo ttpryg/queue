@@ -34,8 +34,7 @@ class QueueConfig
         public int $maxRetries = 3,
         public int $defaultRetryAfter = 60,
         public int $sleepOnFail = 3,
-    ) {
-    }
+    ) {}
 
     public static function fromArray(array $config): self
     {
@@ -68,7 +67,7 @@ class QueueConfig
 
     public function resolveJobClass(string $name): string
     {
-        if (!isset($this->jobHandlers[$name])) {
+        if (! isset($this->jobHandlers[$name])) {
             throw new RuntimeException("Job handler '{$name}' not found.");
         }
 
@@ -77,7 +76,7 @@ class QueueConfig
 
     public function getQueuePriorities(string $name): ?string
     {
-        if (!isset($this->queuePriorities[$name])) {
+        if (! isset($this->queuePriorities[$name])) {
             return null;
         }
 

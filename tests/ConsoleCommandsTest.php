@@ -4,18 +4,17 @@ declare(strict_types=1);
 
 namespace Ttpryg\Queue\Tests;
 
+use PDO;
+use PHPUnit\Framework\TestCase;
+use Symfony\Component\Console\Tester\CommandTester;
 use Ttpryg\Queue\Config\QueueConfig;
 use Ttpryg\Queue\Console\Commands\ClearCommand;
 use Ttpryg\Queue\Console\Commands\FailedCommand;
 use Ttpryg\Queue\Console\Commands\FlushCommand;
 use Ttpryg\Queue\Console\Commands\ForgetCommand;
 use Ttpryg\Queue\Console\Commands\RetryCommand;
-use Ttpryg\Queue\Console\Commands\WorkCommand;
 use Ttpryg\Queue\Database\PdoDatabaseAdapter;
 use Ttpryg\Queue\Handlers\DatabaseHandler;
-use PDO;
-use PHPUnit\Framework\TestCase;
-use Symfony\Component\Console\Tester\CommandTester;
 
 class ConsoleCommandsTest extends TestCase
 {
@@ -47,11 +46,11 @@ class ConsoleCommandsTest extends TestCase
         ');
 
         $adapter = new PdoDatabaseAdapter($pdo);
-        $config = new QueueConfig();
+        $config = new QueueConfig;
         $this->handler = new DatabaseHandler($config, $adapter);
     }
 
-    public function testClearCommand(): void
+    public function test_clear_command(): void
     {
         $this->handler->push('default', 'SomeJob', []);
 
@@ -63,7 +62,7 @@ class ConsoleCommandsTest extends TestCase
         $this->assertStringContainsString('Queue cleared successfully', $tester->getDisplay());
     }
 
-    public function testFailedCommand(): void
+    public function test_failed_command(): void
     {
         $command = new FailedCommand($this->handler);
         $tester = new CommandTester($command);
@@ -73,7 +72,7 @@ class ConsoleCommandsTest extends TestCase
         $this->assertStringContainsString('No failed jobs found', $tester->getDisplay());
     }
 
-    public function testRetryCommand(): void
+    public function test_retry_command(): void
     {
         $command = new RetryCommand($this->handler);
         $tester = new CommandTester($command);
@@ -83,7 +82,7 @@ class ConsoleCommandsTest extends TestCase
         $this->assertStringContainsString('Retried 0 failed job(s)', $tester->getDisplay());
     }
 
-    public function testForgetCommand(): void
+    public function test_forget_command(): void
     {
         $command = new ForgetCommand($this->handler);
         $tester = new CommandTester($command);
@@ -93,7 +92,7 @@ class ConsoleCommandsTest extends TestCase
         $this->assertStringContainsString('not found', $tester->getDisplay());
     }
 
-    public function testFlushCommand(): void
+    public function test_flush_command(): void
     {
         $command = new FlushCommand($this->handler);
         $tester = new CommandTester($command);
