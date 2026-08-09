@@ -35,7 +35,7 @@
     "scripts": {
         "test": "vendor/bin/phpunit",
         "lint": "vendor/bin/pint",
-        "lint:fix": "vendor/bin/pint --test --verbose"
+        "lint:check": "vendor/bin/pint --verbose"
     },
     "minimum-stability": "dev",
     "prefer-stable": true,
