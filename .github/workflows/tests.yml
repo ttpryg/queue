@@ -3,8 +3,18 @@ name: Tests
 on:
   push:
     branches: [ develop ]
+    paths:
+      - 'src/**'
+      - 'tests/**'
+      - 'composer.json'
+      - 'composer.lock'
   pull_request:
     branches: [ develop ]
+    paths:
+      - 'src/**'
+      - 'tests/**'
+      - 'composer.json'
+      - 'composer.lock'
 
 permissions:
   contents: read
