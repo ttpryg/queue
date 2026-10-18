@@ -6,7 +6,7 @@ namespace Ttpryg\Queue\Exceptions;
 
 use RuntimeException;
 
-class QueueException extends RuntimeException
+class QueueException extends RuntimeException implements ExceptionInterface
 {
     public static function forIncorrectHandler(): self
     {
