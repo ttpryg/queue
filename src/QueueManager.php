@@ -35,13 +35,13 @@ class QueueManager
         if (! isset($this->config->handlers[$name])) {
             throw QueueException::forIncorrectHandler();
         }
-
+    
         $handlerClass = $this->config->handlers[$name];
-
-        if ($handlerClass === \Ttpryg\Queue\Handlers\DatabaseHandler::class && $this->db !== null) {
+    
+        if (is_a($handlerClass, \Ttpryg\Queue\Handlers\DatabaseHandler::class, true) && $this->db !== null) {
             return new $handlerClass($this->config, $this->db, $this->logger);
         }
-
+    
         return new $handlerClass($this->config, $this->logger);
     }
 }
